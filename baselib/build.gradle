@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.getName())
+            }
+        }
+
+    }
+
+    buildTypes {
+        release {
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+afterEvaluate {
+    tasks.matching {
+        it.name.startsWith('dex')
+    }.each { dx ->
+        if (dx.additionalParameters == null) {
+            dx.additionalParameters = ['--multi-dex']
+        } else {
+            dx.additionalParameters += '--multi-dex'
+        }
+    }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation rootProject.ext.testDeps["junit"]
+    androidTestImplementation rootProject.ext.testDeps["runner"]
+    androidTestImplementation rootProject.ext.testDeps["espresso-core"]
+    // Support库
+    api rootProject.ext.supportLibs
+    // 网络请求库
+    api rootProject.ext.networkLibs
+    // RxJava2
+    api rootProject.ext.rxJavaLibs
+    // commonLibs
+    api rootProject.ext.commonLibs
+    kapt rootProject.ext.otherDeps["arouter-compiler"]
+    //加载提示框
+    api 'com.kaopiz:kprogresshud:1.0.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+}
