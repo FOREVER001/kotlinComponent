@@ -9,13 +9,7 @@ import client.com.baselib.app.BaseApp
 class App : BaseApp() {
     override fun onCreate() {
         super.onCreate()
-        context=this@App
-    }
-    companion object {
-        var context:Context?=null
-        fun getAppContext():Context?{
-            return context
-        }
 
     }
+
 }

@@ -1,6 +1,7 @@
 package client.com.baselib.app
 
 import android.app.Application
+import android.content.Context
 import client.com.baselib.BuildConfig
 import com.alibaba.android.arouter.launcher.ARouter
 
@@ -8,6 +9,7 @@ import com.alibaba.android.arouter.launcher.ARouter
      private val isDebug:Boolean=BuildConfig.DEBUG
     override fun onCreate() {
         super.onCreate()
+        context=this@BaseApp
         initArouter()
     }
 
@@ -21,4 +23,11 @@ import com.alibaba.android.arouter.launcher.ARouter
         }
         ARouter.init(this)
     }
+     companion object {
+         var context: Context?=null
+         fun getBaseAppContext(): Context?{
+             return context
+         }
+
+     }
 }
